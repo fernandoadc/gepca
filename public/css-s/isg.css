@@ -1,0 +1,28 @@
+.row {
+    display: flex;
+    flex-flow: row wrap;
+    justify-content: space-between;
+}
+
+.img-isg-people-item {
+    width: 23%;
+    margin: 8px;
+}
+
+.img-circle {
+    border-radius: 50%;
+    max-width: 150px;
+    max-height: 220px;
+    width: 150px;
+    height: 150px;
+}
+
+#txt {
+    font-size: 2rem;
+    margin-bottom: 0.6rem;
+}
+
+.titu {
+    text-align: center;
+    color: #337cbb;
+}

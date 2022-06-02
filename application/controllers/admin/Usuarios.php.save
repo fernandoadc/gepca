@@ -1,0 +1,484 @@
+<?php
+/**
+*Controller usuarios
+*/
+defined('BASEPATH') or exit('Ação não permitida');
+
+class Usuarios extends CI_Controller{
+    public function __construct()
+    {
+        parent::__construct();
+         /**Definir se há sessão válida */
+         if (!$this->ion_auth->logged_in())
+         {
+           redirect('admin/login');
+         }
+       
+         /**Verificar se é admin, caso não vai para a public part */
+         if (!$this->ion_auth->is_admin())
+         {
+           redirect('/');
+         }
+    }
+    public function index(){
+
+        /**Carregando dados de usuarios do banco */
+        $data = array(
+            'usuarios' => $this->ion_auth->users()->result(),
+            'titulo'   => 'Usuarios Cadatrados',
+            'styles'   => array(
+                'assets/bundles/datatables/datatables.min.css',
+                'assets/bundles/datatables/DataTables-1.10.16/css/dataTables.bootstrap4.min.css'
+            ),
+            'scripts'  => array(
+                'assets/bundles/datatables/datatables.min.js',
+                'assets/bundles/datatables/DataTables-1.10.16/js/dataTables.bootstrap4.min.js',
+                'assets/bundles/jquery-ui/jquery-ui.min.js',
+                'assets/js/page/datatables.js'
+            )
+        );
+        //echo '<pre>';
+        //print_r($data);
+        //echo '</pre>';
+        //exit();
+
+        $this->load->view('admin/layout/header',$data);
+        $this->load->view('admin/usuarios/index');
+        $this->load->view('admin/layout/footer');
+
+    }
+    public function core($user_id =null){
+        $usuario_id = (int) $user_id;
+        /**criação de um novo usuario */
+        if(!$user_id){
+         /**
+                 * Form validation
+                 */
+                $this->form_validation->set_rules('first_name','Nome','trim|required|min_length[3]');
+                $this->form_validation->set_rules('last_name','Sobrenome','trim|required|min_length[3]');
+                $this->form_validation->set_rules('username','Usuário','trim|required|is_unique[users.username]');
+                $this->form_validation->set_rules('email','Email','trim|required|valid_email|callback_valida_email');
+                $this->form_validation->set_rules('user_cpf','CPF','trim|required|exact_length[14]|callback_valida_cpf');
+                $this->form_validation->set_rules('phone','Telefone','trim|required|min_length[14]|max_length[15]|callback_valida_telefone');
+                $this->form_validation->set_rules('user_cep','CEP','trim|required|exact_length[9]');
+                $this->form_validation->set_rules('user_endereco','Endereço','trim|required');
+                $this->form_validation->set_rules('user_endereco_numero','Número','trim|required');
+                $this->form_validation->set_rules('user_bairro','Bairro','trim|required');
+                $this->form_validation->set_rules('user_cidade','Cidade','trim|required');
+                $this->form_validation->set_rules('company','Empresa','trim|required');
+                $this->form_validation->set_rules('user_estado','Estado','trim|required|exact_length[2]');
+                $this->form_validation->set_rules('user_image','Avatar','trim|required');
+                $this->form_validation->set_rules('password','Senha','trim|required|min_length[6]');
+                $this->form_validation->set_rules('confirma_senha','Confirma senha','trim|matches[password]');
+
+                
+                
+                if($this->form_validation->run()){
+                   
+                   $username = $this->input->post('username');
+                   $password = $this->input->post('password');
+                   $email = $this->input->post('email');
+                   $additional_data = elements(
+                       array(
+                           'first_name',
+                           'last_name',
+                           'user_cpf',
+                           'username',
+                           'phone',
+                           'company',
+                           'user_cep',
+                           'user_endereco',
+                           'user_endereco_numero',
+                           'user_bairro',
+                           'user_cidade',
+                           'user_estado',
+                           'active',
+                           'user_image',
+                           'usuario_id'
+
+                       ),$this->input->post()
+                   );
+                   $group = array($this->input->post('perfil'));//Admin ou anunciante
+                   if($this->ion_auth->register($username,$password,$email,$additional_data,$group)){
+                    $this->session->set_flashdata('sucesso', 'Usuário cadastrado com sucesso!');
+                   }else{
+                    $this->session->set_flashdata('erro', $this->ion_auth->errors());
+                   }
+                   
+                   redirect('admin/'.$this->router->fetch_class());
+                   
+                }else{
+                    //erro na validação do form
+                    //renderiza novamente a view apontando os erros de valicão
+                    $data = array(
+                        'titulo'=>'Cadastrar Usuário',
+                        'scripts'  => array(
+                            'assets/mask/jquery.mask.min.js',
+                            'assets/mask/custom.js',
+                            'assets/js/usuarios.js'
+                           // 'assets/js/jquery.min.js'
+                        ),
+                        'grupos'=> $this->ion_auth->groups()->result()
+                    );
+                   // echo '<pre>';
+                   // print_r($data);
+                   // echo '</pre>';
+                   // exit;
+                    $this->load->view('admin/layout/header',$data);
+                    $this->load->view('admin/usuarios/core');
+                    $this->load->view('admin/layout/footer');
+    
+                }
+        }else{/**update de um usuario já cadastrado*/
+            if(!$usuario = $this->ion_auth->user($user_id)->row()){
+              $this->session->set_flashdata('erro', 'Usuário não encontrado!');
+              redirect('admin/'.$this->router->fetch_class()); 
+            }else{
+               /**
+                * Usuario foi encontrado no sistema
+                */
+                /**
+                 * Form validation
+                 */
+                $this->form_validation->set_rules('first_name','Nome','trim|required|min_length[3]');
+                $this->form_validation->set_rules('last_name','Sobrenome','trim|required|min_length[3]');
+                $this->form_validation->set_rules('email','Email','trim|required|valid_email|callback_valida_email');
+                $this->form_validation->set_rules('user_cpf','CPF','trim|required|exact_length[14]|callback_valida_cpf');
+                $this->form_validation->set_rules('phone','Telefone','trim|required|min_length[14]|max_length[15]|callback_valida_telefone');
+                $this->form_validation->set_rules('user_cep','CEP','trim|required|exact_length[9]');
+                $this->form_validation->set_rules('user_endereco','Endereço','trim|required');
+                $this->form_validation->set_rules('user_endereco_numero','Número','trim|required');
+                $this->form_validation->set_rules('user_bairro','Bairro','trim|required');
+                $this->form_validation->set_rules('user_cidade','Cidade','trim|required');
+                $this->form_validation->set_rules('user_estado','Estado','trim|required|exact_length[2]');
+                $this->form_validation->set_rules('user_image','Avatar','trim|required');
+                $this->form_validation->set_rules('password','Senha','trim|min_length[6]');
+                $this->form_validation->set_rules('confirma_senha','Confirma senha','trim|matches[password]');
+
+                
+                
+                if($this->form_validation->run()){
+                   
+                   $data = elements(
+                       array(
+                           'first_name',
+                           'last_name',
+                           'username',
+                           'email',
+                           'password',
+                           'user_cpf',
+                           'phone',
+                           'company',
+                           'user_cep',
+                           'user_endereco',
+                           'user_endereco_numero',
+                           'user_bairro',
+                           'user_cidade',
+                           'user_estado',
+                           'active',
+                           'user_image',
+                           'usuario_id'
+
+                       ),$this->input->post()
+                   );
+                   /**
+                    * Remove o campo password caso seja nulo
+                    */
+                   if(!$data['password']){
+                    unset($data['password']);
+                   }
+                   
+                   /**Updating Database */
+                   $id = $usuario->id;
+                   if($this->ion_auth->update($id,$data)){
+                    //remove o perfil de acesso atual (table users_group) e após adiciona o novo grupo de perfil de acesso
+                    $perfilDeAcesso = (int) $this->input->post('perfil');
+                    $this->ion_auth->remove_from_group(NULL,$id);
+                    $this->ion_auth->add_to_group($perfilDeAcesso,$id);
+
+
+                    $this->session->set_flashdata('sucesso', 'Dados do usuário Atualiados com sucesso!');
+                   }else{
+                    $this->session->set_flashdata('erro', $this->ion_auth->errors());
+                   }
+                   redirect('admin/'.$this->router->fetch_class());
+                   
+                }else{
+                    //erro na validação do form
+                    //renderiza novamente a view apontando os erros de valicão
+                    $data = array(
+                        'titulo'=>'Editando Usuário',
+                        'scripts'  => array(
+                            'assets/mask/jquery.mask.min.js',
+                            'assets/mask/custom.js',
+                            'assets/js/usuarios.js'
+                           // 'assets/js/jquery.min.js'
+                        ),
+                        'usuario'=> $usuario,
+                        'perfil'=> $this->ion_auth->get_users_groups($usuario->id)->row(),
+                        'grupos'=> $this->ion_auth->groups()->result()
+                    );
+                   // echo '<pre>';
+                   // print_r($data);
+                   // echo '</pre>';
+                   // exit;
+                    $this->load->view('admin/layout/header',$data);
+                    $this->load->view('admin/usuarios/core');
+                    $this->load->view('admin/layout/footer');
+    
+                }
+                
+            }
+        }
+    }
+    public function valida_cpf($cpf) {
+
+        if ($this->input->post('usuario_id')) {
+
+            $usuario_id = $this->input->post('usuario_id');
+            //editando um usuário
+
+            if ($this->core_model->getById('users', array('id !=' => $usuario_id, 'user_cpf' => $cpf))) {
+                $this->form_validation->set_message('valida_cpf', 'O campo {field} já existe, ele deve ser único!');
+                return FALSE;
+            }
+        }else{
+            //cadastrando usuário
+            if ($this->core_model->getById('users', array('user_cpf' => $cpf))) {
+                $this->form_validation->set_message('valida_cpf', 'O campo {field} já existe, ele deve ser único!');
+                return FALSE;
+            }
+        }
+
+        $cpf = str_pad(preg_replace('/[^0-9]/', '', $cpf), 11, '0', STR_PAD_LEFT);
+        // Verifica se nenhuma das sequências abaixo foi digitada, caso seja, retorna falso
+        if (strlen($cpf) != 11 || $cpf == '00000000000' || $cpf == '11111111111' || $cpf == '22222222222' || $cpf == '33333333333' || $cpf == '44444444444' || $cpf == '55555555555' || $cpf == '66666666666' || $cpf == '77777777777' || $cpf == '88888888888' || $cpf == '99999999999') {
+
+            $this->form_validation->set_message('valida_cpf', 'Por favor digite um CPF válido');
+            return FALSE;
+        } else {
+            // Calcula os números para verificar se o CPF é verdadeiro
+            for ($t = 9; $t < 11; $t++) {
+                for ($d = 0, $c = 0; $c < $t; $c++) {
+                    $d += $cpf[$c] * (($t + 1) - $c); //Se PHP version < 7.4, $cpf{$c}
+                }
+                $d = ((10 * $d) % 11) % 10;
+                if ($cpf[$c] != $d) { //Se PHP version < 7.4, $cpf{$c}
+                    $this->form_validation->set_message('valida_cpf', 'Por favor digite um CPF válido');
+                    return FALSE;
+                }
+            }
+            return TRUE;
+        }
+    }
+    public function valida_telefone($phone){
+        $usuario_id = $this->input->post('usuario_id');
+        if(!$usuario_id){
+            /**
+             * Cadastrando
+             */
+            if($this->core_model->getById('users', array('phone' => $phone))){
+                $this->form_validation->set_message('valida_telefone', 'Este {field} já existe!');
+                return false;
+            }else{
+                return true;
+            }
+        }else{
+            /**
+             * Editando
+             */
+            if($this->core_model->getById('users', array('phone' => $phone, 'id !='=>$usuario_id))){
+                $this->form_validation->set_message('valida_telefone', 'Este {field} já existe!');
+                return false;
+            }else{
+                return true;
+            }
+
+        }
+    }
+    
+    public function valida_email($email){
+        $usuario_id = $this->input->post('usuario_id');
+        if(!$usuario_id){
+            /**
+             * Cadastrando
+             */
+            if($this->core_model->getById('users', array('email' => $email))){
+                $this->form_validation->set_message('valida_email', 'Este {field} já existe!');
+                return false;
+            }else{
+                return true;
+            }
+        }else{
+            /**
+             * Editando
+             */
+            if($this->core_model->getById('users', array('email' => $email, 'id !='=>$usuario_id))){
+                $this->form_validation->set_message('valida_email', 'Este {field} já existe!');
+                return false;
+            }else{
+                return true;
+            }
+
+        }
+    }
+    //fuction não utilizada
+    public function preenche_endereco(){
+        if (!$this->input->is_ajax_request()) {
+            exit('Ação não permitida!');
+        }
+        $this->form_validation->set_rules('user_cep','CEP','trim|required|exact_length[9]');
+        $retorno = array();
+        if($this->form_validation->run()){
+            
+            $ch = curl_init();
+			$cep = $this->input->post('user_cep');
+			$url_cep = 'https://viacep.com.br/ws/'.$cep.'/json/';
+			// set URL and other appropriate options
+			curl_setopt($ch, CURLOPT_URL, $url_cep);
+			curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+			curl_setopt($ch, CURLOPT_HEADER, 0);
+			$json = curl_exec($ch);
+			$resultado = json_decode($json);
+			if (!isset($resultado->erro) && isset($resultado->cep)) {
+                $retorno = [
+                    'user_cep' => $resultado->cep,
+                    'user_endereco' => $resultado->logradouro,
+                    'user_bairro' => $resultado->bairro,
+                    'user_cidade' => $resultado->localidade,
+                    'user_estado' => $resultado->uf,
+                ];
+                echo json_encode($retorno);
+            }
+            curl_close($ch);
+		}else{
+           $retorno = [
+               'erro' => 3,
+                'user_cep'=> validation_errors()
+            ];
+            echo  json_encode($retorno);
+        }
+         
+
+
+
+        ///TETSETS
+        
+
+
+
+
+
+
+
+
+
+
+           /* $cep = str_replace("-","",$this->input->post('user_cep'));
+            $url = "https://viacep.com.br/ws/";
+            $url .= $cep;
+            $url .= "/json/";
+            $cr = curl_init();
+            curl_setopt($cr, CURLOPT_URL,$url);
+            curl_setopt($cr, CURLOPT_RETURNTRANSFER,TRUE);
+            $resultadoReq = curl_exec($cr);
+            curl_close($cr);
+           $resultadoReq = json_decode($resultadoReq);
+            if (isset($resultadoReq->erro)) {
+                $retorno['erro'] = 3;
+                $retorno['user_cep'] = 'Informe um CEP válido!';
+                $retorno['mensagem'] = 'Informe um CEP válido!';
+            }else{
+                //tudo certo na requisição
+                $retorno['erro'] = 0;
+                $retorno['user_endereco'] = $resultadoReq->logradouro;
+                $retorno['user_bairro'] = $resultadoReq->bairro;
+                $retorno['user_cidade'] = $resultadoReq->localidade;
+                $retorno['user_estado'] = $resultadoReq->uf;
+                $retorno['mensagem'] = 'CEP encontrado!';
+            }*/
+        //FIMTESETS
+    }
+    public function upload_file(){
+        
+        $config['upload_path']          = './uploads/usuarios/';
+        $config['allowed_types']        = 'jpg|png|JPG|PNG|jpeg|JPEG';
+        $config['encrypt_name']         = true;
+        $config['max_size']             = 1048;//1mg
+        $config['max_width']            = 2000;//px
+        $config['max_height']           = 2000;//px
+        //$config['min_width']            = 350;//px
+        //$config['min_height']           = 340;//px*/
+       
+
+        //carreggando a library
+        $this->load->library('upload', $config);
+
+        //verifica se foi feito o upload
+        if ($this->upload->do_upload('user_image_file')) {
+            
+            $data = array(
+                'foto_enviada' => $this->upload->data(),
+                'user_foto'    => $this->upload->data('file_name'),
+                'erro'         => 0,
+                'msg'          => 'Imagem enviada com sucesso!'
+            );
+            //thumb image
+            $config['image_library']    = 'gd2';
+            $config['source_image']     = './uploads/usuarios/'.$this->upload->data('file_name');
+            $config['new_image']        = './uploads/usuarios/small/'.$this->upload->data('file_name');
+            $config['width']            = 300;
+            $config['height']           = 280;
+
+            $this->load->library('image_lib', $config);
+
+            if (!$this->image_lib->resize()) {
+                $data['erro'] = 3;
+                $data['msg'] = $this->image_lib->display_errors('<span class="text-danger">','</span>');
+            }
+        }else{
+            
+            //erro no upload da imagem
+            $data = array(
+                'erro' =>4,
+                'msg' => $this->upload->display_errors('<span class="text-danger">','</span>')
+
+            );
+           
+        }
+        echo json_encode($data);
+    }
+    public function delete($usuario_id = null){
+        $usuario_id = (int) $usuario_id;
+
+        if (!$usuario_id || !$usuario = $this->ion_auth->user($usuario_id)->row()) {
+           $this->session->set_flashdata('erro', 'Usuário não encontrado!');
+           redirect('admin/'.$this->router->fetch_class());
+        }
+        if ($this->ion_auth->is_admin($usuario->id)) {
+            $this->session->set_flashdata('erro', 'Não é permitido excluir um usuário administrador!');
+            redirect('admin/'.$this->router->fetch_class());
+         }
+
+         if($this->ion_auth->delete_user($usuario->id)){
+            //excluindo as imagens do user recem-exlcluido do servidor
+            $imagem = $usuario->user_image;
+            $imagem_grande = FCPATH.'uploads/usuarios/'.$imagem;
+            $imagem_pequena = FCPATH.'uploads/usuarios/small/'.$imagem;
+            if(file_exists($imagem_grande)){
+                unlink($imagem_grande);
+            }
+            if(file_exists($imagem_pequena)){
+                unlink($imagem_pequena);
+            }
+            $this->session->set_flashdata('sucesso', 'Usuário excluído com sucesso!');
+         }else{
+            //não fooi possivel deletar
+             $this->session->set_flashdata('erro', $this->ion_auth->errors());
+         }
+
+         redirect('admin/'.$this->router->fetch_class());
+
+
+    }
+}

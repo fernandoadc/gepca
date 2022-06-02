@@ -1,0 +1,55 @@
+<section class="header">
+  <h2 class="title">GEPCA/UFOPA - Grupo de Estudo e Pesquisa em Computação Aplicada</h2>
+
+  <div class="value-props row">
+
+    <div class="three columns category">
+      <img class="u-max-full-width" src="<?php echo base_url('public/images/users.png') ?>" width="100">
+    </div>
+    <div class="nine columns category">
+      <h4>Conheça aqui os integrantes da equipe, suas especialidades e suas instituições.</h4>
+      <br>Team Members
+    </div>
+
+  </div>
+
+</section>
+
+<nav class="navbar">
+	<div class="container">
+		<ul class="navbar-list">
+			<li class="navbar-item"><a class="navbar-link" href="<?php echo base_url('homepage') ?>">Home</a></li>
+			<li class="navbar-item"><a class="navbar-link" href="<?php echo base_url('team') ?>">Integrantes</a></li>
+			<li class="navbar-item"><a class="navbar-link" href="prod.html">Produtos</a></li>
+			<li class="navbar-item"><a class="navbar-link" href="<?php echo base_url('publications') ?>">Publicações</a></li>
+		</ul>
+	</div>
+</nav>
+
+<div class="docs-section" id="intr">
+    <h3>Coordenador / Coordinator</h3>
+
+    <?php foreach ($lista as $l) { if($l->tipo == 1){?>
+
+    <p><strong><?= $l->nome ?></strong> <?= $l->descr0000icao ?>  <a href="http://lattes.cnpq.br/6408321790990372">Currículo Lattes</a></p>
+    
+    <?php }}?>
+
+    <h3>Pesquisadores / Researchers</h3>
+
+    <?php foreach ($lista as $l) { if($l->tipo == 2){?>
+
+    <p><strong><?= $l->nome ?></strong> (UFOPA).  <a href="http://lattes.cnpq.br/2408991231058279">Currículo Lattes</a></p>
+
+    <?php }}?>
+
+    <h3>Colaborador / Collaborator</h3>
+
+    <?php foreach ($lista as $l) { if($l->tipo == 3){?>
+
+    <ul>
+      <li><?= $l->nome ?>. 
+      <a href="http://lattes.cnpq.br/4172459222223706">Currículo Lattes</a></li>
+    </ul>
+    <?php }}?>
+  </div>
