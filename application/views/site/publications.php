@@ -1,5 +1,5 @@
 <section class="header">
-  <h2 class="title">GEPCA/UFOPA - Grupo de Estudo e Pesquisa em Computação Aplicada</h2>
+ <!-- <h2 class="title">GEPCA/UFOPA - Grupo de Estudo e Pesquisa em Computação Aplicada</h2>
 
   <div class="value-props row">
 
@@ -11,11 +11,16 @@
 The products of this project include papers, presentations and human resources.<br>
     </div>
 
-  </div>
+  </div>-->
 
 </section>
 
 <nav class="navbar">
+	<div class="container">
+    	<h6>
+      		<b><br>GEPCA |</b> Grupo de Estudo<br> e Pesquisa em Computação Aplicada
+    	</h6>
+  	</div>
 	<div class="container">
 		<ul class="navbar-list">
 			<li class="navbar-item"><a class="navbar-link" href="<?php echo base_url('homepage') ?>">Home</a></li>

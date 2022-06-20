@@ -1,5 +1,5 @@
 <section class="header">
-      <!--<h2 class="title">GEPCA/UFOPA - Grupo de Estudo e Pesquisa em Computação Aplicada</h2>-->
+     <!-- <h2 class="title">GEPCA/UFOPA - Grupo de Estudo e Pesquisa em Computação Aplicada</h2>-->
 
       <div class="value-props row">
         <div class="four columns value-prop">
@@ -18,7 +18,7 @@
 		  Publicações: artigos e mais. 
 	  </div>
     </div>
-	    
+ 
 </section>
 
 <nav class="navbar">
@@ -29,38 +29,36 @@
   </div>
   <div class="container">
     <ul class="navbar-list">
-    <li class="navbar-item"><a class="navbar-link" href="<?php echo base_url('homepage#resumo') ?>">Home</a></li>
-    <li class="navbar-item"><a class="navbar-link" href="<?php echo base_url('team') ?>">Integrantes</a></li>
-    <li class="navbar-item"><a class="navbar-link" href="prod.html">Produtos</a></li>
-    <li class="navbar-item"><a class="navbar-link" href="<?php echo base_url('publications') ?>">Publicações</a></li> </ul>
+  <li class="navbar-item"><a class="navbar-link" href="<?php echo base_url('homepage#resumo') ?>">Home</a></li>
+  <li class="navbar-item"><a class="navbar-link" href="<?php echo base_url('team') ?>">Integrantes</a></li>
+  <li class="navbar-item"><a class="navbar-link" href="prod.html">Produtos</a></li>
+  <li class="navbar-item"><a class="navbar-link" href="<?php echo base_url('publications') ?>">Publicações</a></li> </ul>
   </div>
 </nav>
 
-  <div>
-    <div class="img-section">
+ <!-- <div class="img-section">
       <img src="<?php echo base_url('public/images/imgbest.png') ?>" alt="">
-    </div>
-    <div class="docs-section" id="resumo">
-      <h4 class="docs-header">SOBRE</h4>
-      <!--<?php foreach ($lista as $l) {?>
-      <p><strong>Contexto.</strong> <?= $l->contexto ?></p>
-      <p><strong>Motivação.</strong> <?= $l->motivacao ?></p>
-      <p><strong>Objetivos.</strong> <?= $l->objetivos ?></p>
-      <p><strong>Produtos.</strong> <?= $l->produtos ?>
-      </p>
-      <?php }?>-->
-      <p>
+  </div>-->
+  <div class="docs-section" id="resumo">
+    <h4 class="docs-header">Sobre</h4>
+    <!--<?php foreach ($lista as $l) {?>
+	  <p><strong>Contexto.</strong> <?= $l->contexto ?></p>
+	  <p><strong>Motivação.</strong> <?= $l->motivacao ?></p>
+	  <p><strong>Objetivos.</strong> <?= $l->objetivos ?></p>
+	  <p><strong>Produtos.</strong> <?= $l->produtos ?>
+	  </p>
+    <?php }?>-->
+	  <p>
       Desenvolve pesquisa no uso de técnicas e aplicações de inteligência computacional 
       nos contextos de análise de redes sociais, internet das coisas e educação. 
       Os pesquisadores do grupo buscam solucionar problemas reais que possuam contribuições socioeconômicas. 
       As áreas de aplicação perpassam por Mercados Eletrônicos, Educação, Saúde, Bioinformática, Cidades Inteligentes e 
       Agronegócio, por meio do desenvolvimento de sistemas de suporte à decisão e novas tecnologias de informação e comunicação.
-      </p>
-    </div>
-  </div>
-	
+      	  </p>
+	</div>
+
 	  <div class="docs-section" id="info">
-      <h4 class="docs-header">Demais Informações / Information</h4>
+      <h4 class="docs-header">Informações / Information</h4>
 
 	    <table class="u-full-width">
           <!--<thead><tr><TD>Name</TD>-->
