@@ -4,7 +4,7 @@
 
   <!-- Basic Page Needs –––––––––––––––––––––––––––––––––––––––––––––––––-->
   <meta charset="utf-8">
-  <title>LACA  - Laboratório de Computação Aplicada</title>
+  <title>Grep.Comp  - Grupo de Estudo e Pesquisa em Computação Aplicada</title>
   <meta name="description" content="Laca - Laboratório de Computação Aplicada">
   <meta name="author" content="Fernando Almeida do Carmo">
 

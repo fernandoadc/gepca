@@ -18,7 +18,7 @@ The products of this project include papers, presentations and human resources.<
 <nav class="navbar">
 	<div class="container">
     	<h6>
-      		<b><br>GEPCA |</b> Grupo de Estudo<br> e Pesquisa em Computação Aplicada
+			<b><br>Grep.Comp |</b> Grupo de Estudo<br> e Pesquisa em Computação Aplicada
     	</h6>
   	</div>
 	<div class="container">

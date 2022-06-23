@@ -24,7 +24,7 @@
 <nav class="navbar">
   <div class="container">
     <h6>
-      <b><br>GEPCA |</b> Grupo de Estudo<br> e Pesquisa em Computação Aplicada
+      <b><br>Grep.Comp |</b> Grupo de Estudo<br> e Pesquisa em Computação Aplicada
     </h6>
   </div>
   <div class="container">
@@ -49,12 +49,14 @@
 	  </p>
     <?php }?>-->
 	  <p>
-      Desenvolve pesquisa no uso de técnicas e aplicações de inteligência computacional 
-      nos contextos de análise de redes sociais, internet das coisas e educação. 
-      Os pesquisadores do grupo buscam solucionar problemas reais que possuam contribuições socioeconômicas. 
-      As áreas de aplicação perpassam por Mercados Eletrônicos, Educação, Saúde, Bioinformática, Cidades Inteligentes e 
-      Agronegócio, por meio do desenvolvimento de sistemas de suporte à decisão e novas tecnologias de informação e comunicação.
-      	  </p>
+    O Grupo de Estudo e Pesquisa em Computação Aplicada (Grep.Comp) da UFOPA foi formado em 2017 e registrado no Diretório de Grupos de Pesquisa do Conselho Nacional de Desenvolvimento Científico e Tecnológico (CNPq). Sediado no coração da floresta Amazônica, 
+    o grupo é formado por pesquisadores e pesquisadoras de diversas instituições, interessados em desenvolver e aplicar técnicas de inteligência computacional nos contextos de análise de redes sociais, internet das coisas e educação. 
+    </p>
+    <p>
+    Os(as) pesquisadores(as) do grupo buscam solucionar problemas reais que possuam contribuições socioeconômicas.  Os projetos de Pesquisa e Desenvolvimento conduzidos no âmbito do Grep.Comp possuem como principais agências financiadoras o Conselho Nacional de Desenvolvimento Científico e Tecnológico (CNPq), 
+    Fundação Amazônia de Amparo a Estudos e Pesquisas, no Pará (FAPESPA), Fundação de Amparo à Pesquisa e ao Desenvolvimento Científico e Tecnológico do Maranhão (FAPEMA) e o  Serviço Alemão de Intercâmbio Acadêmico - <b>Deutscher Akademischer Austauschdienst</b> (DAAD). Os projetos perpassam por Mercados Eletrônicos, 
+    Educação, Saúde, Bioinformática, Cidades Inteligentes e Agronegócio, por meio do desenvolvimento de sistemas de suporte à decisão e novas tecnologias de informação e comunicação.
+    </p>
 	</div>
 
 	  <div class="docs-section" id="info">
@@ -64,16 +66,18 @@
           <!--<thead><tr><TD>Name</TD>-->
           <tbody>
             <?php foreach ($lista as $l) {?>
-            <tr><td><b>Líderes/Leaders</b></td>
+            <tr><td><b>Líderes / Leaders</b></td>
               <td>Fábio Manoel França Lobato, Éfren Lopes de Souza</td></tr>
             <tr><td><b>E-mail</b></td>
               <td><?= $l->email ?></td></tr>
             <tr><td><b>Endereço / Address</b></td>
               <td><?= $l->endereco ?></td></tr>
-            <tr><td><b>Executora / Execution</b></td>
-              <td><?= $l->executora ?><br>
-                  Departamento de Ciência da Computação</td></tr>
-            <tr><td><b>Fomento/Funding</b></td><td><?= $l->fomento ?></td></tr>
+            <tr><td><b>Área Predominante</b></td>
+              <td>Ciências Exatas e da Terra; Ciência da Computação</td></tr>
+            <tr><td><b>Instituição do Grupo</b></td>
+              <td>Universidade Federal do Oeste do Pará - UFOPA</td></tr>
+            <tr><td><b>Fomento / Funding</b></td><td>CNPq, FAPESPA, FAPEMA, DAAD</td></tr>
+            <tr><td><b>DGP - CNPq</b></td><td><a href="http://dgp.cnpq.br/dgp/espelhogrupo/2969843796195905" target="blank" style="color: #373A37; text-decoration: none;">dgp.cnpq.br/dgp/espelhogrupo/2969843796195905</a></td></tr>
             <?php }?>
           </tbody>
       </table>
